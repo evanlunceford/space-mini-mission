@@ -1,0 +1,7 @@
+{
+  "name": "space-mini-mission",
+  "version": "0.1.0",
+  "dependencies": [
+    "sdl2"
+  ]
+}

@@ -1,22 +1,33 @@
 #include "core/time_system.h"
+#include <SDL2/SDL.h>
+
 
 int main() {
 
-    Mission mission("Test Mission");
+    // Redundancy checking
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        printf("SDL Init Error: %s\n", SDL_GetError());
+        return 1;
+    }
 
-    Timeline launch("Launch Timeline");
+    SDL_Window* window = SDL_CreateWindow(
+        "Space Mini Mission",
+        SDL_WINDOWPOS_CENTERED,
+        SDL_WINDOWPOS_CENTERED,
+        800,
+        600,
+        SDL_WINDOW_SHOWN
+    );
 
-    TimelineNode* fuel = new TimelineNode("Fueling", 0, 10);
-    TimelineNode* ignition = new TimelineNode("Engine Ignition", 10, 15, fuel);
-    TimelineNode* liftoff = new TimelineNode("Liftoff", 15, 20, ignition);
+    if (!window) {
+        printf("Window Error: %s\n", SDL_GetError());
+        SDL_Quit();
+        return 1;
+    }
 
-    launch.insert(fuel);
-    launch.insert(ignition);
-    launch.insert(liftoff);
+    SDL_Delay(30000);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 
-    mission.add_timeline(std::move(launch));
-
-
-    mission.print();
     return 0;
 }

@@ -3,7 +3,12 @@
     "allow": [
       "Bash(read f:*)",
       "Bash(ls -lh /c/Users/evanl/VSProjects/space-mini-mission/mission_sim/src/*/*.*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(vcpkg:*)",
+      "Bash(git:*)",
+      "Bash(bash:*)",
+      "Bash(/c/vcpkg/vcpkg.exe search:*)",
+      "Bash(/c/vcpkg/vcpkg.exe install:*)"
     ]
   }
 }
