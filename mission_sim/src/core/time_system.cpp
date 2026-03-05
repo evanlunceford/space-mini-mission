@@ -247,3 +247,10 @@ void Mission::events_at_time(time_t time) const {
         }
     }
 }
+
+void Mission::print() const{
+    printf("Mission: %s\n", name.c_str());
+    for(const auto& t : timelines ) {
+        t.print();
+    }
+}

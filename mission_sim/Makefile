@@ -15,11 +15,11 @@ $(BUILD)/$(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 $(BUILD)/%.o: %.cpp
-	if not exist "$(dir $@)" mkdir "$(dir $@)"
+	mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -Isrc -c $< -o $@
 
 run: all
 	$(BUILD)/$(TARGET)
 
 clean:
-	if exist $(BUILD) rmdir /s /q $(BUILD)
+	rm -rf $(BUILD)

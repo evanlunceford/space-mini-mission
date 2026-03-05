@@ -61,6 +61,8 @@ public:
     Timeline* get_timeline(const std::string& timeline_name);
     TimelineNode* next_event(time_t current_time);
     void events_at_time(time_t time) const;
+
+    void print() const;
 };
 
 #endif
