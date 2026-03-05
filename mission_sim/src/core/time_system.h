@@ -1,121 +1,66 @@
 #ifndef TIME_SYSTEM_H
 #define TIME_SYSTEM_H
 
-#include <time.h>
-#include <stdbool.h>
+#include <ctime>
+#include <string>
+#include <vector>
 
 
-// TimelineNode -> Timeline -> Mission
-typedef struct TimelineNode {
-    char *payload;
+class TimelineNode {
+public:
+    std::string payload;
     time_t start_time;
     time_t end_time;
-    bool isCompleted;
+    bool is_completed;
 
-    // If NULL, node has no dependency
-    struct TimelineNode *dependency;
+    // If nullptr, node has no dependency
+    TimelineNode* dependency;
 
-    struct TimelineNode *next;
-} TimelineNode;
+    TimelineNode* next;
 
-typedef struct {
-    char *timeline_name;
-    TimelineNode *head;
-} Timeline;
+    TimelineNode(std::string payload, time_t start, time_t end, TimelineNode* dep = nullptr);
 
-typedef struct {
-    char *mission_name;
-    Timeline *timelines;
-    int timeline_count;
-} Mission;
+    bool complete();
+    bool reset();
+    bool active_at(time_t time) const;
+    bool add_dependency(TimelineNode* dep);
+};
 
 
-// TimelineNode functions
-TimelineNode *create_timeline_node(
-    char *payload,
-    time_t start,
-    time_t end,
-    // Null = no dependency
-    TimelineNode *dependency
-);
+class Timeline {
+public:
+    std::string name;
+    TimelineNode* head;
 
-bool complete_timeline_node(TimelineNode *node);
+    explicit Timeline(std::string name);
+    ~Timeline();
 
-bool reset_timeline_node(TimelineNode *node);
+    // Timelines own their nodes — disable copy, allow move
+    Timeline(const Timeline&) = delete;
+    Timeline& operator=(const Timeline&) = delete;
+    Timeline(Timeline&& other) noexcept;
+    Timeline& operator=(Timeline&& other) noexcept;
 
-bool timeline_node_active_at(
-    TimelineNode *node,
-    time_t time
-);
-
-bool timeline_node_add_dependency(
-    TimelineNode *node,
-    TimelineNode *dependency
-);
-
-void destroy_timeline_node(TimelineNode *node);
+    bool insert(TimelineNode* node);
+    bool remove(TimelineNode* node);
+    TimelineNode* find_at(time_t time) const;
+    TimelineNode* next_event(time_t current_time) const;
+    bool detect_conflicts() const;
+    void print() const;
+};
 
 
-// Timeline functions
-Timeline *create_timeline(char *name);
+class Mission {
+public:
+    std::string name;
+    std::vector<Timeline> timelines;
 
-bool timeline_insert_node(
-    Timeline *timeline,
-    TimelineNode *node
-);
+    explicit Mission(std::string name);
 
-bool timeline_remove_node(
-    Timeline *timeline,
-    TimelineNode *node
-);
-
-TimelineNode *timeline_find_event_at(
-    Timeline *timeline,
-    time_t time
-);
-
-TimelineNode *timeline_next_event(
-    Timeline *timeline,
-    time_t current_time
-);
-
-bool timeline_detect_conflicts(
-    Timeline *timeline
-);
-
-void timeline_print(
-    Timeline *timeline
-);
-
-void destroy_timeline(
-    Timeline *timeline
-);
-
-// Mission functions
-Mission *create_mission(char *name);
-
-bool mission_add_timeline(
-    Mission *mission,
-    Timeline *timeline
-);
-
-Timeline *mission_get_timeline(
-    Mission *mission,
-    char *timeline_name
-);
-
-TimelineNode *mission_next_event(
-    Mission *mission,
-    time_t current_time
-);
-
-void mission_events_at_time(
-    Mission *mission,
-    time_t time
-);
-
-void destroy_mission(
-    Mission *mission
-);
+    bool add_timeline(Timeline timeline);
+    Timeline* get_timeline(const std::string& timeline_name);
+    TimelineNode* next_event(time_t current_time);
+    void events_at_time(time_t time) const;
+};
 
 #endif

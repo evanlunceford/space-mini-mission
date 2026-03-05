@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(read f:*)",
-      "Bash(ls -lh /c/Users/evanl/VSProjects/space-mini-mission/mission_sim/src/*/*.*)"
+      "Bash(ls -lh /c/Users/evanl/VSProjects/space-mini-mission/mission_sim/src/*/*.*)",
+      "Bash(mv:*)"
     ]
   }
 }
