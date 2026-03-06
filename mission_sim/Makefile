@@ -2,7 +2,7 @@ CXX      = g++
 VCPKG_ROOT ?= C:/vcpkg
 VCPKG_INSTALLED = $(CURDIR)/../vcpkg_installed/x64-mingw-static
 CXXFLAGS = -Wall -Wextra -std=c++17 -g -I$(VCPKG_INSTALLED)/include
-LDFLAGS  = -L$(VCPKG_INSTALLED)/lib -lSDL2main -lSDL2 -lmingw32 -mwindows
+LDFLAGS  = -L$(VCPKG_INSTALLED)/lib -lmingw32 -lSDL2main -lSDL2 -mwindows -lsetupapi -lole32 -loleaut32 -limm32 -lversion -lwinmm -lcfgmgr32
 TARGET   = mission_sim
 BUILD    = build
 

@@ -1,8 +1,11 @@
-#include "core/time_system.h"
+#define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
+#include "core/time_system.h"
 
 
 int main() {
+
+    SDL_SetMainReady();
 
     // Redundancy checking
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -25,7 +28,6 @@ int main() {
         return 1;
     }
 
-    SDL_Delay(30000);
     SDL_DestroyWindow(window);
     SDL_Quit();
 
